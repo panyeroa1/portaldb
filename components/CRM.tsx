@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Lead, Property, User, Ticket, Invoice, AgentPersona, UserRole, Document, Task, OutboundNumber, WebCallConfig } from '../types';
 import { MOCK_NOTIFICATIONS, MOCK_DOCUMENTS, MOCK_EMAILS, MOCK_CAMPAIGNS, AVAILABLE_VOICES, DEFAULT_AGENT_PERSONA, OWNED_NUMBERS, BLAND_AUTH } from '../constants';
@@ -10,7 +11,7 @@ import {
   PieChart, Settings, Inbox as InboxIcon, Briefcase, Megaphone, Receipt,
   Menu, ChevronLeft, ChevronDown, Wrench, HardHat, Bell, LogOut, Shield,
   Plus, Filter, Download, ArrowUpRight, ArrowDownLeft, AlertCircle, File, Image as ImageIcon,
-  MessageSquare, BarChart3, Target, Bot, Users, CheckSquare, CalendarDays, Mic, Save, Radio, Globe, Lock, PhoneCall, AudioLines
+  MessageSquare, BarChart3, Target, Bot, Users, CheckSquare, CalendarDays, Mic, Save, Radio, Globe, Lock, PhoneCall, AudioLines, Check
 } from 'lucide-react';
 
 interface CRMProps {
@@ -144,6 +145,262 @@ const CRM: React.FC<CRMProps> = ({
                       </div>
                   </div>
               ))}
+          </div>
+      </div>
+  );
+
+  const InboxView = () => (
+    <div className="animate-in fade-in duration-500">
+        <h2 className="text-2xl font-bold text-slate-800 mb-6">Inbox</h2>
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            {MOCK_EMAILS.map(email => (
+                <div key={email.id} className={`p-4 border-b border-slate-100 flex gap-4 hover:bg-slate-50 cursor-pointer ${!email.read ? 'bg-indigo-50/30' : ''}`}>
+                     <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600 shrink-0">
+                         {email.from[0]}
+                     </div>
+                     <div className="flex-1 min-w-0">
+                         <div className="flex justify-between mb-1">
+                             <span className={`text-sm ${!email.read ? 'font-bold text-slate-900' : 'font-medium text-slate-700'}`}>{email.from}</span>
+                             <span className="text-xs text-slate-500">{email.date}</span>
+                         </div>
+                         <h4 className={`text-sm mb-1 ${!email.read ? 'font-bold text-slate-800' : 'font-medium text-slate-600'}`}>{email.subject}</h4>
+                         <p className="text-sm text-slate-500 truncate">{email.preview}</p>
+                     </div>
+                </div>
+            ))}
+        </div>
+    </div>
+  );
+
+  const MarketingView = () => (
+      <div className="animate-in fade-in duration-500">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-800">Marketing Campaigns</h2>
+            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-indigo-700">Create Campaign</button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {MOCK_CAMPAIGNS.map(camp => (
+                  <div key={camp.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                      <div className="flex justify-between items-start mb-4">
+                          <div className={`p-2 rounded-lg ${camp.platform === 'Facebook' ? 'bg-blue-100 text-blue-600' : camp.platform === 'Instagram' ? 'bg-pink-100 text-pink-600' : 'bg-green-100 text-green-600'}`}>
+                              <Megaphone className="w-5 h-5"/>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-bold ${camp.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                              {camp.status}
+                          </span>
+                      </div>
+                      <h3 className="font-bold text-slate-900 mb-1">{camp.name}</h3>
+                      <div className="grid grid-cols-2 gap-4 mt-6">
+                          <div>
+                              <p className="text-xs text-slate-500 uppercase font-bold">Clicks</p>
+                              <p className="text-xl font-bold text-slate-800">{camp.clicks}</p>
+                          </div>
+                          <div>
+                              <p className="text-xs text-slate-500 uppercase font-bold">Spend</p>
+                              <p className="text-xl font-bold text-slate-800">{camp.spend}</p>
+                          </div>
+                      </div>
+                  </div>
+              ))}
+          </div>
+      </div>
+  );
+
+  const AnalyticsView = () => (
+      <div className="animate-in fade-in duration-500">
+          <h2 className="text-2xl font-bold text-slate-800 mb-6">Analytics</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-80 flex items-center justify-center">
+                  <p className="text-slate-400 font-medium">Revenue Chart Placeholder</p>
+              </div>
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-80 flex items-center justify-center">
+                  <p className="text-slate-400 font-medium">Lead Sources Placeholder</p>
+              </div>
+          </div>
+      </div>
+  );
+
+  const DocumentsView = () => (
+      <div className="animate-in fade-in duration-500">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-800">Documents</h2>
+            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-indigo-700 flex items-center gap-2">
+                <Plus className="w-4 h-4"/> Upload
+            </button>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
+              <table className="w-full text-left">
+                  <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 text-xs uppercase font-bold">
+                      <tr>
+                          <th className="px-6 py-4">Name</th>
+                          <th className="px-6 py-4">Category</th>
+                          <th className="px-6 py-4">Date</th>
+                          <th className="px-6 py-4">Size</th>
+                          <th className="px-6 py-4"></th>
+                      </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                      {MOCK_DOCUMENTS.filter(d => d.sharedWith.includes(currentUser.role)).map(doc => (
+                          <tr key={doc.id} className="hover:bg-slate-50">
+                              <td className="px-6 py-4 flex items-center gap-3">
+                                  <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-xs">
+                                      {doc.type}
+                                  </div>
+                                  <span className="font-bold text-slate-800">{doc.name}</span>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-slate-600">{doc.category}</td>
+                              <td className="px-6 py-4 text-sm text-slate-600">{doc.date}</td>
+                              <td className="px-6 py-4 text-sm text-slate-600">{doc.size}</td>
+                              <td className="px-6 py-4 text-right">
+                                  <button className="p-2 hover:bg-slate-200 rounded-full text-slate-500">
+                                      <Download className="w-4 h-4"/>
+                                  </button>
+                              </td>
+                          </tr>
+                      ))}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  );
+
+  const FinanceView = () => (
+      <div className="animate-in fade-in duration-500">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-800">Financials</h2>
+            <div className="flex gap-2">
+                <button className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700 shadow-sm">Export</button>
+                <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-sm">New Invoice</button>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+               <table className="w-full text-left">
+                  <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 text-xs uppercase font-bold">
+                      <tr>
+                          <th className="px-6 py-4">Status</th>
+                          <th className="px-6 py-4">Description</th>
+                          <th className="px-6 py-4">Date</th>
+                          <th className="px-6 py-4 text-right">Amount</th>
+                      </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                      {invoices.map(inv => (
+                          <tr key={inv.id} className="hover:bg-slate-50">
+                              <td className="px-6 py-4">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                      inv.status === 'PAID' ? 'bg-emerald-100 text-emerald-700' :
+                                      inv.status === 'PENDING' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
+                                  }`}>
+                                      {inv.status}
+                                  </span>
+                              </td>
+                              <td className="px-6 py-4">
+                                  <div className="font-bold text-slate-900">{inv.description}</div>
+                                  <div className="text-xs text-slate-500">{inv.propertyAddress}</div>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-slate-600">{new Date(inv.date).toLocaleDateString()}</td>
+                              <td className="px-6 py-4 text-right font-mono font-bold text-slate-900">€{inv.amount.toFixed(2)}</td>
+                          </tr>
+                      ))}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  );
+
+  const TasksView = () => (
+      <div className="animate-in fade-in duration-500">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-800">Tasks</h2>
+            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-indigo-700 flex items-center gap-2">
+                <Plus className="w-4 h-4"/> Add Task
+            </button>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
+              {tasks.map(task => (
+                  <div key={task.id} className="p-4 border-b border-slate-100 flex items-center gap-4 hover:bg-slate-50">
+                      <div 
+                        onClick={() => onUpdateTask({...task, completed: !task.completed})}
+                        className={`w-6 h-6 rounded border cursor-pointer flex items-center justify-center transition-colors ${task.completed ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 hover:border-emerald-500'}`}
+                      >
+                          {task.completed && <Check className="w-4 h-4 text-white"/>}
+                      </div>
+                      <div className="flex-1">
+                          <h4 className={`font-bold text-sm ${task.completed ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{task.title}</h4>
+                          <div className="flex items-center gap-2 mt-1">
+                              {task.leadName && <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">{task.leadName}</span>}
+                              <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                  task.priority === 'HIGH' ? 'bg-red-50 text-red-700' : 
+                                  task.priority === 'MEDIUM' ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'
+                              }`}>{task.priority}</span>
+                              <span className="text-xs text-slate-400 flex items-center gap-1"><Clock className="w-3 h-3"/> {new Date(task.dueDate).toLocaleDateString()}</span>
+                          </div>
+                      </div>
+                  </div>
+              ))}
+              {tasks.length === 0 && <div className="p-8 text-center text-slate-400">No tasks found</div>}
+          </div>
+      </div>
+  );
+
+  const CalendarView = () => (
+      <div className="animate-in fade-in duration-500">
+           <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-800">Calendar</h2>
+            <div className="flex gap-2">
+                 <button className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50"><ChevronLeft className="w-4 h-4"/></button>
+                 <span className="px-4 py-2 font-bold text-slate-700">{currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
+                 <button className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50"><ChevronRight className="w-4 h-4"/></button>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 h-[600px] flex items-center justify-center">
+              <p className="text-slate-400 font-medium">Calendar Integration Placeholder</p>
+          </div>
+      </div>
+  );
+
+  const MaintenanceView = () => (
+      <div className="animate-in fade-in duration-500">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-800">Maintenance Requests</h2>
+            <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-indigo-700 flex items-center gap-2">
+                <Plus className="w-4 h-4"/> New Request
+            </button>
+          </div>
+           <div className="flex gap-2 mb-4">
+              {(['ALL', 'OPEN', 'SCHEDULED', 'COMPLETED'] as const).map(status => (
+                  <button 
+                    key={status} 
+                    onClick={() => setFilterTicketStatus(status)}
+                    className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${filterTicketStatus === status ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                  >
+                      {status}
+                  </button>
+              ))}
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200">
+              {tickets.filter(t => filterTicketStatus === 'ALL' || t.status === filterTicketStatus).map(ticket => (
+                  <div key={ticket.id} className="p-6 border-b border-slate-100 hover:bg-slate-50">
+                      <div className="flex justify-between items-start mb-2">
+                          <div>
+                              <h3 className="font-bold text-slate-900">{ticket.title}</h3>
+                              <p className="text-sm text-slate-500">{ticket.propertyAddress}</p>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                              ticket.status === 'OPEN' ? 'bg-red-100 text-red-700' :
+                              ticket.status === 'SCHEDULED' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'
+                          }`}>
+                              {ticket.status}
+                          </span>
+                      </div>
+                      <p className="text-sm text-slate-600 mb-4">{ticket.description}</p>
+                      <div className="flex items-center gap-4 text-xs text-slate-500">
+                          <span className="flex items-center gap-1"><AlertCircle className="w-3 h-3"/> Priority: {ticket.priority}</span>
+                          <span className="flex items-center gap-1"><Clock className="w-3 h-3"/> {new Date(ticket.createdAt).toLocaleDateString()}</span>
+                      </div>
+                  </div>
+              ))}
+               {tickets.length === 0 && <div className="p-8 text-center text-slate-400">No tickets found</div>}
           </div>
       </div>
   );
@@ -484,355 +741,6 @@ You are part of the Eburon system. Be professional, concise, and helpful.`;
       );
   };
 
-  const InboxView = () => (
-      <div className="animate-in fade-in duration-500 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-              <div>
-                   <h2 className="text-2xl font-bold text-slate-800">Inbox</h2>
-                   <p className="text-slate-500 text-sm">Unified messaging (Email, WhatsApp)</p>
-              </div>
-          </div>
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex-1 overflow-hidden flex">
-              <div className="w-full md:w-1/3 border-r border-slate-100 flex flex-col">
-                   <div className="p-4 border-b border-slate-100">
-                       <input type="text" placeholder="Search messages..." className="w-full px-4 py-2 bg-slate-50 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"/>
-                   </div>
-                   <div className="overflow-y-auto flex-1">
-                       {MOCK_EMAILS.map(email => (
-                           <div key={email.id} className={`p-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition-colors ${!email.read ? 'bg-indigo-50/30' : ''}`}>
-                               <div className="flex justify-between items-start mb-1">
-                                   <div className="flex items-center gap-2">
-                                        {email.source === 'WHATSAPP' ? (
-                                            <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center text-white"><MessageSquare className="w-3 h-3"/></div>
-                                        ) : (
-                                            <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white"><Mail className="w-3 h-3"/></div>
-                                        )}
-                                        <span className={`text-sm font-bold ${!email.read ? 'text-slate-900' : 'text-slate-600'}`}>{email.from}</span>
-                                   </div>
-                                   <span className="text-xs text-slate-400">{email.date}</span>
-                               </div>
-                               <div className={`text-sm mb-1 ${!email.read ? 'font-bold text-slate-800' : 'text-slate-700'}`}>{email.subject}</div>
-                               <div className="text-xs text-slate-500 truncate">{email.preview}</div>
-                           </div>
-                       ))}
-                   </div>
-              </div>
-              <div className="hidden md:flex flex-1 flex-col items-center justify-center text-slate-400 bg-slate-50/30">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
-                      <InboxIcon className="w-8 h-8 text-slate-300"/>
-                  </div>
-                  <p className="text-sm font-medium">Select a message to view conversation</p>
-              </div>
-          </div>
-      </div>
-  );
-
-  const MarketingView = () => (
-      <div className="animate-in fade-in duration-500">
-           <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-slate-800">Marketing</h2>
-                <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex gap-2 items-center">
-                    <Plus className="w-4 h-4" /> New Campaign
-                </button>
-           </div>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-               {MOCK_CAMPAIGNS.map(camp => (
-                   <div key={camp.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                       <div className="flex justify-between items-start mb-4">
-                           <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                               camp.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'
-                           }`}>
-                               {camp.status}
-                           </span>
-                           <span className="text-xs font-bold text-slate-400">{camp.platform}</span>
-                       </div>
-                       <h3 className="font-bold text-slate-900 mb-6">{camp.name}</h3>
-                       <div className="flex justify-between items-end">
-                           <div>
-                               <p className="text-xs text-slate-500 uppercase font-bold mb-1">Clicks</p>
-                               <p className="text-xl font-bold text-slate-800">{camp.clicks}</p>
-                           </div>
-                            <div>
-                               <p className="text-xs text-slate-500 uppercase font-bold mb-1">Spend</p>
-                               <p className="text-xl font-bold text-slate-800">{camp.spend}</p>
-                           </div>
-                       </div>
-                   </div>
-               ))}
-           </div>
-      </div>
-  );
-
-  const AnalyticsView = () => (
-      <div className="animate-in fade-in duration-500">
-           <h2 className="text-2xl font-bold text-slate-800 mb-6">Analytics</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm min-h-[300px] flex flex-col justify-center items-center text-center">
-                   <BarChart3 className="w-16 h-16 text-indigo-100 mb-4"/>
-                   <h3 className="text-lg font-bold text-slate-700">Performance Metrics</h3>
-                   <div className="flex gap-2 items-end h-32 mt-4">
-                        {[40, 70, 45, 90, 65, 80, 50].map((h, i) => (
-                            <div key={i} style={{height: `${h}%`}} className="w-4 bg-emerald-500 rounded-t-sm"></div>
-                        ))}
-                   </div>
-               </div>
-               <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm min-h-[300px] flex flex-col justify-center items-center text-center">
-                   <Target className="w-16 h-16 text-indigo-100 mb-4"/>
-                   <h3 className="text-lg font-bold text-slate-700">Conversion Goals</h3>
-                    <div className="relative w-32 h-32 mt-4">
-                        <svg className="w-full h-full" viewBox="0 0 36 36">
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" strokeWidth="3" />
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831" fill="none" stroke="#10b981" strokeWidth="3" strokeDasharray="75, 100" />
-                        </svg>
-                        <div className="absolute inset-0 flex items-center justify-center font-bold text-slate-800">75%</div>
-                    </div>
-               </div>
-           </div>
-      </div>
-  );
-
-  const MaintenanceView = () => (
-      <div className="animate-in fade-in duration-500 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-800">Maintenance Tickets</h2>
-                <p className="text-slate-500 text-sm">Track repairs and requests</p>
-              </div>
-              <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 flex items-center gap-2">
-                  <Plus className="w-4 h-4"/> New Ticket
-              </button>
-          </div>
-          {/* ... existing implementation ... */}
-           <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-              {(['ALL', 'OPEN', 'SCHEDULED', 'COMPLETED'] as const).map(status => (
-                  <button 
-                    key={status}
-                    onClick={() => setFilterTicketStatus(status)}
-                    className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${
-                        filterTicketStatus === status ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                    }`}
-                  >
-                      {status}
-                  </button>
-              ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pb-10">
-              {tickets.filter(t => filterTicketStatus === 'ALL' || t.status === filterTicketStatus).map(ticket => (
-                  <div key={ticket.id} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-start mb-3">
-                          <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                              ticket.priority === 'HIGH' ? 'bg-red-100 text-red-700' : 
-                              ticket.priority === 'MEDIUM' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
-                          }`}>
-                              {ticket.priority} Priority
-                          </span>
-                          <span className="text-xs text-slate-400">{new Date(ticket.createdAt).toLocaleDateString()}</span>
-                      </div>
-                      <h3 className="font-bold text-slate-900 mb-1">{ticket.title}</h3>
-                      <p className="text-xs text-slate-500 mb-4 line-clamp-2">{ticket.description}</p>
-                      
-                      <div className="flex items-center gap-2 text-xs text-slate-600 mb-4 bg-slate-50 p-2 rounded-lg">
-                          <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                          <span className="truncate">{ticket.propertyAddress}</span>
-                      </div>
-
-                      <div className="flex justify-between items-center pt-3 border-t border-slate-50">
-                          <div className={`flex items-center gap-1.5 text-xs font-bold ${
-                              ticket.status === 'COMPLETED' ? 'text-emerald-600' : 'text-indigo-600'
-                          }`}>
-                              {ticket.status === 'COMPLETED' ? <CheckCircle className="w-3.5 h-3.5"/> : <Clock className="w-3.5 h-3.5"/>}
-                              {ticket.status}
-                          </div>
-                          <button className="text-slate-400 hover:text-indigo-600 text-xs font-medium">Details &rarr;</button>
-                      </div>
-                  </div>
-              ))}
-          </div>
-      </div>
-  );
-
-  const FinanceView = () => (
-      <div className="animate-in fade-in duration-500">
-          <h2 className="text-2xl font-bold text-slate-800 mb-6">Financial Overview</h2>
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6">
-              <h3 className="font-bold text-slate-800 mb-4">Invoices & Payments</h3>
-              <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm">
-                      <thead className="bg-slate-50 text-slate-500 text-xs uppercase font-semibold">
-                          <tr>
-                              <th className="px-4 py-3">Invoice ID</th>
-                              <th className="px-4 py-3">Property</th>
-                              <th className="px-4 py-3">Description</th>
-                              <th className="px-4 py-3">Date</th>
-                              <th className="px-4 py-3">Amount</th>
-                              <th className="px-4 py-3">Status</th>
-                          </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                          {invoices.map(inv => (
-                              <tr key={inv.id} className="hover:bg-slate-50">
-                                  <td className="px-4 py-3 font-mono text-slate-500">#{inv.id}</td>
-                                  <td className="px-4 py-3 text-slate-800 font-medium">{inv.propertyAddress}</td>
-                                  <td className="px-4 py-3 text-slate-600">{inv.description}</td>
-                                  <td className="px-4 py-3 text-slate-500">{inv.date}</td>
-                                  <td className="px-4 py-3 font-bold text-slate-900">€{inv.amount}</td>
-                                  <td className="px-4 py-3">
-                                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                                          inv.status === 'PAID' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                                      }`}>
-                                          {inv.status}
-                                      </span>
-                                  </td>
-                              </tr>
-                          ))}
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-  );
-
-  const CalendarView = () => {
-    // ... reused logic ...
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstDayOfMonth = new Date(year, month, 1).getDay(); 
-    const emptySlots = Array.from({ length: firstDayOfMonth });
-    const daySlots = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const isToday = (d: number) => { const today = new Date(); return d === today.getDate() && month === today.getMonth() && year === today.getFullYear(); };
-
-    return (
-      <div className="animate-in fade-in duration-500 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-slate-800">{monthNames[month]} {year}</h2>
-              <div className="flex gap-2">
-                  <button onClick={() => setCurrentDate(new Date(year, month - 1, 1))} className="p-2 border rounded-lg hover:bg-slate-50"><ChevronLeft className="w-4 h-4"/></button>
-                  <button onClick={() => setCurrentDate(new Date())} className="px-3 py-1 text-xs font-bold border rounded-lg hover:bg-slate-50">Today</button>
-                  <button onClick={() => setCurrentDate(new Date(year, month + 1, 1))} className="p-2 border rounded-lg hover:bg-slate-50"><ChevronRight className="w-4 h-4"/></button>
-              </div>
-          </div>
-          <div className="grid grid-cols-7 gap-px bg-slate-200 border border-slate-200 rounded-lg overflow-hidden flex-1">
-               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-                  <div key={d} className="bg-slate-50 p-2 text-center text-xs font-bold text-slate-500 uppercase flex items-center justify-center">{d}</div>
-               ))}
-               {emptySlots.map((_, i) => (<div key={`empty-${i}`} className="bg-white p-2 min-h-[80px]"></div>))}
-               {daySlots.map((day) => {
-                  const dateStr = new Date(year, month, day).toDateString();
-                  const dayTasks = tasks.filter(t => !t.completed && new Date(t.dueDate).toDateString() === dateStr);
-                  return (
-                      <div key={day} className={`bg-white p-2 min-h-[80px] hover:bg-slate-50 transition-colors relative flex flex-col gap-1 ${isToday(day) ? 'bg-indigo-50/30' : ''}`}>
-                          <span className={`text-sm font-medium w-6 h-6 flex items-center justify-center rounded-full ${isToday(day) ? 'bg-indigo-600 text-white' : 'text-slate-700'}`}>{day}</span>
-                          <div className="flex flex-col gap-1 overflow-y-auto max-h-[60px] no-scrollbar">
-                              {dayTasks.map(t => (
-                                  <div key={t.id} className="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded truncate border border-indigo-200" title={t.title}>{t.title}</div>
-                              ))}
-                          </div>
-                      </div>
-                  );
-               })}
-          </div>
-      </div>
-    );
-  };
-
-  const DocumentsView = () => (
-      <div className="animate-in fade-in duration-500 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-              <div>
-                   <h2 className="text-2xl font-bold text-slate-800">Documents</h2>
-                   <p className="text-slate-500 text-sm">Contracts, Invoices, and Reports</p>
-              </div>
-              <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex gap-2 items-center hover:bg-indigo-700">
-                  <Plus className="w-4 h-4" /> Upload
-              </button>
-          </div>
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex-1 overflow-hidden flex flex-col">
-              <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm">
-                      <thead className="bg-slate-50 text-slate-500 text-xs uppercase font-semibold border-b border-slate-100">
-                          <tr>
-                              <th className="px-6 py-4">Name</th>
-                              <th className="px-6 py-4">Category</th>
-                              <th className="px-6 py-4">Date</th>
-                              <th className="px-6 py-4">Size</th>
-                              <th className="px-6 py-4"></th>
-                          </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                          {MOCK_DOCUMENTS.map(doc => (
-                              <tr key={doc.id} className="hover:bg-slate-50 transition-colors">
-                                  <td className="px-6 py-4">
-                                      <div className="flex items-center gap-3">
-                                          <div className={`p-2 rounded-lg ${
-                                              doc.type === 'PDF' ? 'bg-red-50 text-red-600' : 
-                                              doc.type === 'XLS' ? 'bg-green-50 text-green-600' :
-                                              doc.type === 'IMG' ? 'bg-purple-50 text-purple-600' : 'bg-blue-50 text-blue-600'
-                                          }`}>
-                                              <FileText className="w-5 h-5"/>
-                                          </div>
-                                          <div className="font-medium text-slate-900">{doc.name}</div>
-                                      </div>
-                                  </td>
-                                  <td className="px-6 py-4">
-                                      <span className="px-2 py-1 bg-slate-100 rounded text-xs font-bold text-slate-600">{doc.category}</span>
-                                  </td>
-                                  <td className="px-6 py-4 text-slate-500">{doc.date}</td>
-                                  <td className="px-6 py-4 text-slate-500 font-mono text-xs">{doc.size}</td>
-                                  <td className="px-6 py-4 text-right">
-                                      <button className="text-slate-400 hover:text-indigo-600 transition-colors">
-                                          <Download className="w-4 h-4"/>
-                                      </button>
-                                  </td>
-                              </tr>
-                          ))}
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-  );
-
-  const TasksView = () => (
-      <div className="animate-in fade-in duration-500 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-              <div>
-                   <h2 className="text-2xl font-bold text-slate-800">Tasks</h2>
-                   <p className="text-slate-500 text-sm">Follow-ups and to-dos</p>
-              </div>
-              <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex gap-2 items-center hover:bg-indigo-700">
-                  <Plus className="w-4 h-4" /> New Task
-              </button>
-          </div>
-          <div className="grid grid-cols-1 gap-4 overflow-y-auto pb-20">
-              {tasks.map(task => (
-                  <div key={task.id} className={`p-4 rounded-xl border transition-all ${task.completed ? 'bg-slate-50 border-slate-100 opacity-60' : 'bg-white border-slate-200 hover:shadow-md'}`}>
-                      <div className="flex items-start gap-4">
-                          <button 
-                            onClick={() => onUpdateTask({...task, completed: !task.completed})}
-                            className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-colors mt-0.5 ${
-                                task.completed ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-300 hover:border-indigo-500'
-                            }`}
-                          >
-                              {task.completed && <CheckCircle className="w-4 h-4" />}
-                          </button>
-                          <div className="flex-1">
-                              <h3 className={`font-bold ${task.completed ? 'text-slate-500 line-through' : 'text-slate-800'}`}>{task.title}</h3>
-                              <div className="flex flex-wrap items-center gap-3 mt-2">
-                                  <div className="flex items-center gap-1.5 text-xs text-slate-500"><CalendarIcon className="w-3.5 h-3.5" />{new Date(task.dueDate).toLocaleDateString()}</div>
-                                  {task.leadName && (<div className="flex items-center gap-1.5 text-xs text-indigo-600 bg-indigo-50 px-2 py-1 rounded font-medium"><UserIcon className="w-3 h-3" />{task.leadName}</div>)}
-                                  <div className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${task.priority === 'HIGH' ? 'bg-red-100 text-red-600' : task.priority === 'MEDIUM' ? 'bg-amber-100 text-amber-600' : 'bg-blue-50 text-blue-600'}`}>{task.priority}</div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              ))}
-          </div>
-      </div>
-  );
-
   return (
     <div className="flex flex-col h-full bg-slate-50">
       {/* CRM Header */}
@@ -877,16 +785,10 @@ You are part of the Eburon system. Be professional, concise, and helpful.`;
                 </div>
                 <ChevronDown className="w-3 h-3 text-slate-400 hidden md:block" />
                 
-                {/* User Dropdown */}
-                <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 z-50">
-                    <div className="px-4 py-2 bg-slate-50 border-b border-slate-100"><p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Switch Profile (Demo)</p></div>
-                    {(['BROKER', 'OWNER', 'RENTER', 'CONTRACTOR'] as UserRole[]).map(r => (
-                        <button key={r} onClick={() => onSwitchUser(r)} className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 flex items-center gap-2 ${currentUser.role === r ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600'}`}>
-                            <Users className="w-3 h-3"/> {r.charAt(0) + r.slice(1).toLowerCase()}
-                        </button>
-                    ))}
-                    <div className="border-t border-slate-100 mt-1">
-                        <button onClick={onLogout} className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"><LogOut className="w-4 h-4" /> Reset / Sign out</button>
+                {/* User Dropdown - SIMPLIFIED */}
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden hidden group-hover:block animate-in fade-in slide-in-from-top-2 z-50">
+                    <div className="py-1">
+                        <button onClick={onLogout} className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"><LogOut className="w-4 h-4" /> Sign out</button>
                     </div>
                 </div>
              </div>
@@ -924,6 +826,7 @@ You are part of the Eburon system. Be professional, concise, and helpful.`;
                 </>
              )}
              
+             {/* ... Other Roles ... */}
              {currentUser.role === 'OWNER' && (
                 <>
                     <div className="px-3"><NavItem id="dashboard" label="Dashboard" icon={LayoutDashboard} /></div>

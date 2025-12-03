@@ -87,7 +87,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
           Available Cities in Database: Ghent, Brussels, Antwerp, Bruges, Knokke, Leuven, Namur, Liege.
           `;
           
-          await geminiClient.connect(systemPrompt, 'Zephyr', true);
+          await geminiClient.connect(systemPrompt, 'Orus', true);
       }
   };
 

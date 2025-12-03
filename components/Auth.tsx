@@ -80,49 +80,6 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     }
   };
 
-  const handleDemoLogin = (selectedRole: UserRole) => {
-      // Define Demo Personas
-      const demoPersonas = {
-          BROKER: { name: 'Laurent De Wilde', email: 'laurent@eburon.com' },
-          OWNER: { name: 'Marc Peeters', email: 'marc.peeters@telenet.be' },
-          RENTER: { name: 'Sophie Dubois', email: 'sophie.d@example.com' },
-          CONTRACTOR: { name: 'Johan Smet', email: 'johan.smet@fixit.be' }
-      };
-
-      const persona = demoPersonas[selectedRole];
-      
-      // Auto-fill fields visually
-      setRole(selectedRole);
-      setEmail(persona.email);
-      setPassword('demo-password-123'); // Dummy password
-      
-      setLoading(true);
-
-      // Simulate network delay for realism, then log in with Mock Data
-      // This ensures the demo buttons ALWAYS work, even if Supabase is empty/down
-      setTimeout(() => {
-          const mockUser: User = {
-              id: `demo-${selectedRole.toLowerCase()}`,
-              name: persona.name,
-              email: persona.email,
-              role: selectedRole,
-              avatar: `https://ui-avatars.com/api/?name=${persona.name.replace(' ', '+')}&background=random`
-          };
-          
-          onLogin(mockUser);
-          setLoading(false);
-      }, 800);
-  };
-
-  const getRoleIcon = (r: UserRole) => {
-    switch (r) {
-      case 'BROKER': return <Building className="w-5 h-5" />;
-      case 'OWNER': return <UserIcon className="w-5 h-5" />;
-      case 'RENTER': return <Home className="w-5 h-5" />;
-      case 'CONTRACTOR': return <Wrench className="w-5 h-5" />;
-    }
-  };
-
   const getRoleDescription = (r: UserRole) => {
     switch (r) {
       case 'BROKER': return 'Property Manager / Agency';
@@ -218,38 +175,41 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               </div>
             </div>
 
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-slate-700 mb-2">
-                {mode === 'signup' ? 'I am a...' : 'Login as (if first time)'}
-              </label>
-              <div className="grid grid-cols-1 gap-3">
-                {(['BROKER', 'OWNER', 'RENTER', 'CONTRACTOR'] as UserRole[]).map((r) => (
-                  <div 
-                    key={r}
-                    onClick={() => setRole(r)}
-                    className={`relative rounded-xl border p-4 flex cursor-pointer focus:outline-none transition-all ${
-                      role === r 
-                        ? 'bg-indigo-50 border-indigo-200 ring-1 ring-indigo-500' 
-                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
-                    }`}
-                  >
-                    <div className="flex items-center">
-                        <div className={`flex items-center justify-center h-5 w-5 rounded-full border ${role === r ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-slate-300'}`}>
-                            {role === r && <div className="w-2 h-2 bg-white rounded-full" />}
-                        </div>
-                        <div className="ml-3 flex items-center gap-2">
-                            <span className={`block text-sm font-medium ${role === r ? 'text-indigo-900' : 'text-slate-900'}`}>
-                                {r.charAt(0) + r.slice(1).toLowerCase()}
-                            </span>
-                             <span className={`text-xs ${role === r ? 'text-indigo-700' : 'text-slate-500'}`}>
-                                - {getRoleDescription(r)}
-                            </span>
-                        </div>
+            {/* Role selection only on Signup */}
+            {mode === 'signup' && (
+              <div>
+                <label htmlFor="role" className="block text-sm font-medium text-slate-700 mb-2">
+                  I am a...
+                </label>
+                <div className="grid grid-cols-1 gap-3">
+                  {(['BROKER', 'OWNER', 'RENTER', 'CONTRACTOR'] as UserRole[]).map((r) => (
+                    <div 
+                      key={r}
+                      onClick={() => setRole(r)}
+                      className={`relative rounded-xl border p-4 flex cursor-pointer focus:outline-none transition-all ${
+                        role === r 
+                          ? 'bg-indigo-50 border-indigo-200 ring-1 ring-indigo-500' 
+                          : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                          <div className={`flex items-center justify-center h-5 w-5 rounded-full border ${role === r ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-slate-300'}`}>
+                              {role === r && <div className="w-2 h-2 bg-white rounded-full" />}
+                          </div>
+                          <div className="ml-3 flex items-center gap-2">
+                              <span className={`block text-sm font-medium ${role === r ? 'text-indigo-900' : 'text-slate-900'}`}>
+                                  {r.charAt(0) + r.slice(1).toLowerCase()}
+                              </span>
+                              <span className={`text-xs ${role === r ? 'text-indigo-700' : 'text-slate-500'}`}>
+                                  - {getRoleDescription(r)}
+                              </span>
+                          </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             <div>
               <button
@@ -261,39 +221,6 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               </button>
             </div>
           </form>
-
-          {mode === 'signin' && (
-             <div className="mt-6">
-                <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-200" />
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                    <span className="px-3 bg-white text-slate-400 font-medium">Demo Quick Login</span>
-                    </div>
-                </div>
-
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                    {(['BROKER', 'OWNER', 'RENTER', 'CONTRACTOR'] as UserRole[]).map((r) => (
-                        <button
-                            key={r}
-                            onClick={() => handleDemoLogin(r)}
-                            disabled={loading}
-                            className="flex items-center justify-center gap-2 py-3 px-3 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-200 hover:shadow-md transition-all group disabled:opacity-50"
-                        >
-                            <div className={`p-1.5 rounded-lg bg-slate-100 text-slate-500 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors`}>
-                                {getRoleIcon(r)}
-                            </div>
-                            <div className="text-left">
-                                <div className="text-xs font-bold text-slate-700 group-hover:text-indigo-700">{r.charAt(0) + r.slice(1).toLowerCase()}</div>
-                                <div className="text-[10px] text-slate-400 group-hover:text-indigo-400">Auto-fill</div>
-                            </div>
-                            <ArrowRight className="w-3 h-3 text-slate-300 ml-auto group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
-                        </button>
-                    ))}
-                </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
