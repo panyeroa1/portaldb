@@ -1,7 +1,22 @@
 
-import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
+import { GoogleGenAI, LiveServerMessage, Modality, FunctionDeclaration, Type } from '@google/genai';
 import { createPcmBlob, decode, decodeAudioData } from './audioUtils';
 import { LAURENT_SYSTEM_PROMPT } from '../constants';
+
+// Define the Tool for Property Filtering
+const filterPropertiesTool: FunctionDeclaration = {
+  name: 'filterProperties',
+  description: 'Filter the list of properties based on user location, price, and type preferences.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      location: { type: Type.STRING, description: 'City name in Belgium (e.g., Ghent, Brussels, Antwerp)' },
+      maxPrice: { type: Type.NUMBER, description: 'Maximum price per night in Euros' },
+      propertyType: { type: Type.STRING, description: 'Type of property (Apartment, House, Villa, etc.)' },
+      bedrooms: { type: Type.NUMBER, description: 'Minimum number of bedrooms' }
+    },
+  }
+};
 
 export class GeminiLiveClient {
   private ai: GoogleGenAI | null = null;
@@ -20,13 +35,14 @@ export class GeminiLiveClient {
 
   public onVolumeChange: ((inputVol: number, outputVol: number) => void) | null = null;
   public onClose: (() => void) | null = null;
+  public onToolCall: ((functionCall: any) => void) | null = null; // New Callback
 
   constructor() {
     // Client is initialized in connect()
   }
 
-  // Updated to accept optional custom system prompt and voice name
-  async connect(customSystemPrompt?: string, voiceName: string = 'Zephyr') {
+  // Updated to accept optional custom system prompt, voice name, and tool definitions
+  async connect(customSystemPrompt?: string, voiceName: string = 'Zephyr', useTools: boolean = false) {
     this.disconnect(); // Clean up existing
 
     // Initialize AI Client here to ensure we get the latest process.env.API_KEY
@@ -47,21 +63,19 @@ export class GeminiLiveClient {
     }
 
     // Setup Recording Mixer in Output Context (Output Context is 24kHz, Input is 16kHz)
-    // We mix mic stream into the output context's destination for recording purposes
     if (this.outputAudioContext && this.stream) {
         this.recordingDestination = this.outputAudioContext.createMediaStreamDestination();
         const micSource = this.outputAudioContext.createMediaStreamSource(this.stream);
         micSource.connect(this.recordingDestination);
     }
 
-    const config = {
+    const config: any = {
       model: 'gemini-2.5-flash-native-audio-preview-09-2025',
       callbacks: {
         onopen: this.handleOpen.bind(this),
         onmessage: this.handleMessage.bind(this),
         onerror: (e: ErrorEvent) => {
             console.error('Gemini Error:', e);
-            // If the error is network related, it might be due to API Key or firewall
         },
         onclose: (e: CloseEvent) => {
             console.log('Gemini Session Closed', e);
@@ -73,10 +87,13 @@ export class GeminiLiveClient {
         speechConfig: {
           voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } },
         },
-        // Use custom prompt if provided, else fallback to default constant
         systemInstruction: customSystemPrompt || LAURENT_SYSTEM_PROMPT,
       },
     };
+
+    if (useTools) {
+        config.config.tools = [{ functionDeclarations: [filterPropertiesTool] }];
+    }
 
     if (this.ai && this.ai.live) {
         this.sessionPromise = this.ai.live.connect(config);
@@ -86,7 +103,6 @@ export class GeminiLiveClient {
   private handleOpen() {
     console.log('Gemini Live Connected');
     
-    // Ensure contexts are running (needed for some browsers)
     if (this.inputAudioContext && this.inputAudioContext.state === 'suspended') {
         this.inputAudioContext.resume();
     }
@@ -97,17 +113,15 @@ export class GeminiLiveClient {
     if (!this.inputAudioContext || !this.stream) return;
 
     const source = this.inputAudioContext.createMediaStreamSource(this.stream);
-    // Buffer size 4096 gives ~0.25s latency at 16kHz
     this.scriptProcessor = this.inputAudioContext.createScriptProcessor(4096, 1, 1);
 
     this.scriptProcessor.onaudioprocess = (e) => {
       const inputData = e.inputBuffer.getChannelData(0);
       
-      // Calculate input volume for visualizer
       let sum = 0;
       for (let i = 0; i < inputData.length; i++) sum += inputData[i] * inputData[i];
       const rms = Math.sqrt(sum / inputData.length);
-      if(this.onVolumeChange) this.onVolumeChange(rms * 5, 0); // Temporary output 0
+      if(this.onVolumeChange) this.onVolumeChange(rms * 5, 0); 
 
       const pcmBlob = createPcmBlob(inputData);
       
@@ -123,6 +137,7 @@ export class GeminiLiveClient {
   }
 
   private async handleMessage(message: LiveServerMessage) {
+    // 1. Handle Audio Output
     const base64Audio = message.serverContent?.modelTurn?.parts?.[0]?.inlineData?.data;
 
     if (base64Audio && this.outputAudioContext) {
@@ -139,22 +154,17 @@ export class GeminiLiveClient {
       source.buffer = audioBuffer;
       const gainNode = this.outputAudioContext.createGain();
       
-      // Simple visualization hook for output
       const analyser = this.outputAudioContext.createAnalyser();
       analyser.fftSize = 256;
       source.connect(gainNode);
       gainNode.connect(analyser);
       
-      // Connect to Speakers
       gainNode.connect(this.outputAudioContext.destination);
       
-      // Connect to Recording Stream if active
       if (this.recordingDestination) {
           gainNode.connect(this.recordingDestination);
       }
 
-      // We need to poll the analyser for volume data during playback if we want precise visualization
-      // For simplicity in this demo, we can just trigger "activity"
       if(this.onVolumeChange) {
           this.onVolumeChange(0, 0.5); 
           setTimeout(() => { if(this.onVolumeChange) this.onVolumeChange(0, 0); }, audioBuffer.duration * 1000);
@@ -167,6 +177,29 @@ export class GeminiLiveClient {
       source.start(this.nextStartTime);
       this.nextStartTime += audioBuffer.duration;
       this.sources.add(source);
+    }
+
+    // 2. Handle Tool Calls
+    if (message.toolCall) {
+        for (const fc of message.toolCall.functionCalls) {
+            console.log('Gemini Tool Call:', fc.name, fc.args);
+            if (this.onToolCall) {
+                this.onToolCall(fc);
+            }
+            
+            // Respond to tool call to keep session alive
+            if (this.sessionPromise) {
+                this.sessionPromise.then(session => {
+                    session.sendToolResponse({
+                        functionResponses: {
+                            id: fc.id,
+                            name: fc.name,
+                            response: { result: "Filter applied successfully." }
+                        }
+                    });
+                });
+            }
+        }
     }
 
     const interrupted = message.serverContent?.interrupted;
@@ -188,7 +221,6 @@ export class GeminiLiveClient {
     if (!this.recordingDestination) return;
     this.recordedChunks = [];
     
-    // Create recorder from the mixed stream
     try {
         this.mediaRecorder = new MediaRecorder(this.recordingDestination.stream);
     } catch (e) {
@@ -203,7 +235,6 @@ export class GeminiLiveClient {
     };
     
     this.mediaRecorder.start();
-    console.log("Recording started");
   }
 
   async stopRecording(): Promise<string> {
@@ -221,7 +252,6 @@ export class GeminiLiveClient {
         };
         
         this.mediaRecorder.stop();
-        console.log("Recording stopped");
     });
   }
 

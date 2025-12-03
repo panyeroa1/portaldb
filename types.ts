@@ -22,11 +22,18 @@ export interface Lead {
 
 export interface Property {
   id: string;
+  title: string; // Added for listing title
   address: string;
-  price: string;
+  city: string; // Added for filtering
+  price: number; // Changed to number for filtering
   type: string;
   status: 'Active' | 'Sold' | 'Pending';
   image: string;
+  rating: number; // Added
+  reviews: number; // Added
+  bedrooms: number; // Added
+  amenities: string[]; // Added
+  coordinates?: { lat: number; lng: number }; // Added
 }
 
 export enum CallState {
@@ -82,6 +89,7 @@ export interface Invoice {
   date: string;
   description: string;
   propertyAddress: string;
+  createdAt: string; // Fixed matching db usage
 }
 
 export interface Message {

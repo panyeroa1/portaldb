@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Lead, Property, User, Ticket, Invoice, AgentPersona, UserRole, Document, Task, OutboundNumber, WebCallConfig } from '../types';
 import { MOCK_NOTIFICATIONS, MOCK_DOCUMENTS, MOCK_EMAILS, MOCK_CAMPAIGNS, AVAILABLE_VOICES, DEFAULT_AGENT_PERSONA, OWNED_NUMBERS, BLAND_AUTH } from '../constants';
@@ -62,8 +61,8 @@ const CRM: React.FC<CRMProps> = ({
         const t = await db.getTickets();
         setTickets(t);
         setInvoices([
-            { id: '1', amount: 1200, status: 'PAID', date: '2023-09-01', description: 'Monthly Rent', propertyAddress: 'Kouter 12' },
-            { id: '2', amount: 240, status: 'PENDING', date: '2023-09-15', description: 'Plumbing Repair', propertyAddress: 'Meir 24' }
+            { id: '1', amount: 1200, status: 'PAID', date: '2023-09-01', description: 'Monthly Rent', propertyAddress: 'Kouter 12', createdAt: '2023-09-01T10:00:00Z' },
+            { id: '2', amount: 240, status: 'PENDING', date: '2023-09-15', description: 'Plumbing Repair', propertyAddress: 'Meir 24', createdAt: '2023-09-15T14:30:00Z' }
         ]);
     };
     loadData();

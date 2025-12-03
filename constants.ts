@@ -1,4 +1,3 @@
-
 import { Lead, Property, Notification, Document, AgentPersona, Email, Campaign, BlandConfig, VoiceOption, OutboundNumber } from './types';
 
 export const LAURENT_SYSTEM_PROMPT = `
@@ -195,32 +194,41 @@ export const MOCK_LEADS: Lead[] = [
   },
 ];
 
-export const MOCK_PROPERTIES: Property[] = [
-  {
-    id: '101',
-    address: 'Kouter 12, 9000 Gent',
-    price: '€ 450,000',
-    type: 'Apartment',
-    status: 'Active',
-    image: 'https://picsum.photos/400/300?random=1'
-  },
-  {
-    id: '102',
-    address: 'Meir 24, 2000 Antwerpen',
-    price: '€ 1,200 / mo',
-    type: 'Commercial',
-    status: 'Active',
-    image: 'https://picsum.photos/400/300?random=2'
-  },
-  {
-    id: '103',
-    address: 'Louise Avenue 200, 1050 Brussels',
-    price: '€ 890,000',
-    type: 'Penthouse',
-    status: 'Pending',
-    image: 'https://picsum.photos/400/300?random=3'
-  }
+// --- BELGIUM PROPERTIES FOR LANDING PAGE ---
+export const BELGIUM_PROPERTIES: Property[] = [
+    { id: '101', title: 'Modern Loft in Ghent', address: 'Kouter 12, 9000 Gent', city: 'Ghent', price: 450, type: 'Apartment', status: 'Active', rating: 4.8, reviews: 124, bedrooms: 2, amenities: ['Wifi', 'Kitchen'], image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80' },
+    { id: '102', title: 'Historic Canal House', address: 'Graslei 8, 9000 Gent', city: 'Ghent', price: 180, type: 'House', status: 'Active', rating: 4.95, reviews: 89, bedrooms: 3, amenities: ['Waterfront', 'Wifi'], image: 'https://images.unsplash.com/photo-1512918760513-95f192972701?auto=format&fit=crop&w=800&q=80' },
+    { id: '103', title: 'Luxury Penthouse Brussels', address: 'Louise Ave 200, 1050 Brussels', city: 'Brussels', price: 320, type: 'Apartment', status: 'Pending', rating: 4.7, reviews: 45, bedrooms: 2, amenities: ['Pool', 'Gym'], image: 'https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?auto=format&fit=crop&w=800&q=80' },
+    { id: '104', title: 'Cozy Studio near Grand Place', address: 'Rue du Marché 5, 1000 Brussels', city: 'Brussels', price: 95, type: 'Studio', status: 'Active', rating: 4.6, reviews: 210, bedrooms: 1, amenities: ['Wifi', 'Self check-in'], image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80' },
+    { id: '105', title: 'Fashion District Apartment', address: 'Nationalestraat 45, 2000 Antwerp', city: 'Antwerp', price: 150, type: 'Apartment', status: 'Active', rating: 4.85, reviews: 67, bedrooms: 2, amenities: ['Wifi', 'Balcony'], image: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80' },
+    { id: '106', title: 'Diamond Quarter Suite', address: 'Pelikaanstraat 10, 2018 Antwerp', city: 'Antwerp', price: 130, type: 'Apartment', status: 'Active', rating: 4.5, reviews: 102, bedrooms: 1, amenities: ['Wifi', 'Elevator'], image: 'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80' },
+    { id: '107', title: 'Medieval Cottage', address: 'Dijver 15, 8000 Bruges', city: 'Bruges', price: 210, type: 'Cottage', status: 'Active', rating: 4.98, reviews: 320, bedrooms: 3, amenities: ['Garden', 'Fireplace'], image: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=800&q=80' },
+    { id: '108', title: 'Canal View Room', address: 'Rozenhoedkaai 3, 8000 Bruges', city: 'Bruges', price: 160, type: 'Private Room', status: 'Active', rating: 4.9, reviews: 150, bedrooms: 1, amenities: ['Breakfast', 'Wifi'], image: 'https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&w=800&q=80' },
+    { id: '109', title: 'Seaside Villa Knokke', address: 'Zoutelaan 100, 8300 Knokke', city: 'Knokke', price: 550, type: 'Villa', status: 'Active', rating: 5.0, reviews: 40, bedrooms: 5, amenities: ['Pool', 'Beach access'], image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80' },
+    { id: '110', title: 'Modern Dune Apartment', address: 'Kustlaan 42, 8300 Knokke', city: 'Knokke', price: 280, type: 'Apartment', status: 'Active', rating: 4.75, reviews: 88, bedrooms: 2, amenities: ['Sea view', 'Parking'], image: 'https://images.unsplash.com/photo-1499916078039-92237843f636?auto=format&fit=crop&w=800&q=80' },
+    { id: '111', title: 'Student Loft Leuven', address: 'Naamsestraat 22, 3000 Leuven', city: 'Leuven', price: 80, type: 'Studio', status: 'Active', rating: 4.3, reviews: 45, bedrooms: 1, amenities: ['Wifi', 'Desk'], image: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80' },
+    { id: '112', title: 'Beguinage House', address: 'Groot Begijnhof 5, 3000 Leuven', city: 'Leuven', price: 195, type: 'House', status: 'Active', rating: 4.92, reviews: 110, bedrooms: 3, amenities: ['Garden', 'Quiet'], image: 'https://images.unsplash.com/photo-1598228723793-52759bba239c?auto=format&fit=crop&w=800&q=80' },
+    { id: '113', title: 'Citadel View Apartment', address: 'Rue de Fer 12, 5000 Namur', city: 'Namur', price: 120, type: 'Apartment', status: 'Active', rating: 4.65, reviews: 76, bedrooms: 2, amenities: ['View', 'Kitchen'], image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80' },
+    { id: '114', title: 'Meuse River Cottage', address: 'Quai de Meuse 8, 5000 Namur', city: 'Namur', price: 165, type: 'Cottage', status: 'Active', rating: 4.8, reviews: 90, bedrooms: 2, amenities: ['Garden', 'River view'], image: 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80' },
+    { id: '115', title: 'Ardennes Forest Cabin', address: 'Route de Bastogne 4, 6600 Bastogne', city: 'Ardennes', price: 140, type: 'Cabin', status: 'Active', rating: 4.88, reviews: 230, bedrooms: 2, amenities: ['Fireplace', 'Hiking'], image: 'https://images.unsplash.com/photo-1449156493391-d2cfa28e468b?auto=format&fit=crop&w=800&q=80' },
+    { id: '116', title: 'Luxury Spa Retreat', address: 'Avenue de la Source 1, 4900 Spa', city: 'Spa', price: 350, type: 'Villa', status: 'Active', rating: 4.95, reviews: 60, bedrooms: 4, amenities: ['Jacuzzi', 'Sauna'], image: 'https://images.unsplash.com/photo-1571896349842-6e5a513e610a?auto=format&fit=crop&w=800&q=80' },
+    { id: '117', title: 'Grand Place Apartment', address: 'Grote Markt 10, 2800 Mechelen', city: 'Mechelen', price: 110, type: 'Apartment', status: 'Active', rating: 4.7, reviews: 85, bedrooms: 2, amenities: ['Central', 'Wifi'], image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80' },
+    { id: '118', title: 'Design Loft Liège', address: 'Rue Hors-Château 15, 4000 Liège', city: 'Liege', price: 135, type: 'Loft', status: 'Active', rating: 4.6, reviews: 92, bedrooms: 1, amenities: ['Modern', 'Wifi'], image: 'https://images.unsplash.com/photo-1556912172-45b7abe8d7e1?auto=format&fit=crop&w=800&q=80' },
+    { id: '119', title: 'Guillemins Station Flat', address: 'Place des Guillemins 2, 4000 Liège', city: 'Liege', price: 90, type: 'Apartment', status: 'Active', rating: 4.4, reviews: 120, bedrooms: 1, amenities: ['Transport', 'Wifi'], image: 'https://images.unsplash.com/photo-1522771753035-4a50097a1f89?auto=format&fit=crop&w=800&q=80' },
+    { id: '120', title: 'Ypres Historic House', address: 'Grote Markt 20, 8900 Ypres', city: 'Ypres', price: 170, type: 'House', status: 'Active', rating: 4.8, reviews: 145, bedrooms: 3, amenities: ['History', 'Central'], image: 'https://images.unsplash.com/photo-1599809275372-b4036281f744?auto=format&fit=crop&w=800&q=80' },
+    { id: '121', title: 'Beachfront Studio Ostend', address: 'Albert I Promenade 50, 8400 Ostend', city: 'Ostend', price: 125, type: 'Studio', status: 'Active', rating: 4.5, reviews: 200, bedrooms: 1, amenities: ['Sea view', 'Elevator'], image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80' },
+    { id: '122', title: 'Art Deco Apartment', address: 'Koningin Astridlaan 5, 9000 Gent', city: 'Ghent', price: 160, type: 'Apartment', status: 'Active', rating: 4.75, reviews: 55, bedrooms: 2, amenities: ['Style', 'Garden'], image: 'https://images.unsplash.com/photo-1503174971373-b1f69850bded?auto=format&fit=crop&w=800&q=80' },
+    { id: '123', title: 'EU District Flat', address: 'Rue de la Loi 100, 1000 Brussels', city: 'Brussels', price: 140, type: 'Apartment', status: 'Active', rating: 4.3, reviews: 300, bedrooms: 1, amenities: ['Business', 'Wifi'], image: 'https://images.unsplash.com/photo-1484154218962-a1c002085d2f?auto=format&fit=crop&w=800&q=80' },
+    { id: '124', title: 'Sablon Antique Suite', address: 'Place du Grand Sablon 8, 1000 Brussels', city: 'Brussels', price: 250, type: 'Suite', status: 'Active', rating: 4.9, reviews: 80, bedrooms: 2, amenities: ['Luxury', 'View'], image: 'https://images.unsplash.com/photo-1615529182904-14819c35db37?auto=format&fit=crop&w=800&q=80' },
+    { id: '125', title: 'Country Manor Durbuy', address: 'Rue du Comte 1, 6940 Durbuy', city: 'Durbuy', price: 400, type: 'House', status: 'Active', rating: 4.95, reviews: 110, bedrooms: 6, amenities: ['Nature', 'Large groups'], image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80' },
+    { id: '126', title: 'River View Dinant', address: 'Rue Adolphe Sax 12, 5500 Dinant', city: 'Dinant', price: 155, type: 'Apartment', status: 'Active', rating: 4.7, reviews: 95, bedrooms: 2, amenities: ['View', 'Balcony'], image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80' },
+    { id: '127', title: 'Forest Chalet', address: 'Chemin du Bois 7, 4960 Malmedy', city: 'Malmedy', price: 130, type: 'Chalet', status: 'Active', rating: 4.6, reviews: 78, bedrooms: 2, amenities: ['Forest', 'Quiet'], image: 'https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=800&q=80' },
+    { id: '128', title: 'University City Studio', address: 'Place du 20 Août 5, 4000 Liège', city: 'Liege', price: 75, type: 'Studio', status: 'Active', rating: 4.2, reviews: 60, bedrooms: 1, amenities: ['Budget', 'Central'], image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80' },
+    { id: '129', title: 'Luxury Loft Antwerp', address: 'Eilandje 22, 2000 Antwerp', city: 'Antwerp', price: 300, type: 'Loft', status: 'Active', rating: 4.88, reviews: 105, bedrooms: 2, amenities: ['Harbour view', 'Design'], image: 'https://images.unsplash.com/photo-1600596542815-2a4d9f7990d7?auto=format&fit=crop&w=800&q=80' },
+    { id: '130', title: 'Family Home Hasselt', address: 'Grote Markt 5, 3500 Hasselt', city: 'Hasselt', price: 165, type: 'House', status: 'Active', rating: 4.75, reviews: 50, bedrooms: 3, amenities: ['Family', 'Shopping'], image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?auto=format&fit=crop&w=800&q=80' }
 ];
+
+export const MOCK_PROPERTIES = BELGIUM_PROPERTIES; // Use the new list as default
 
 export const MOCK_NOTIFICATIONS: Record<string, Notification[]> = {
   BROKER: [
@@ -243,179 +251,29 @@ export const MOCK_NOTIFICATIONS: Record<string, Notification[]> = {
 };
 
 export const MOCK_DOCUMENTS: Document[] = [
-  // Contracts
-  { id: '1', name: 'Lease_Agreement_Kouter12.pdf', type: 'PDF', size: '2.4 MB', date: '2023-09-01', category: 'Contracts', sharedWith: ['BROKER', 'OWNER', 'RENTER'] },
-  { id: '2', name: 'Management_Contract_Meir24.pdf', type: 'PDF', size: '1.8 MB', date: '2023-08-15', category: 'Contracts', sharedWith: ['BROKER', 'OWNER'] },
-  
-  // Invoices
-  { id: '3', name: 'Invoice_Plumbing_Repair_#402.pdf', type: 'PDF', size: '0.5 MB', date: '2023-09-10', category: 'Invoices', sharedWith: ['BROKER', 'OWNER', 'CONTRACTOR'] },
-  { id: '4', name: 'Commission_Statement_Q3.xls', type: 'XLS', size: '0.8 MB', date: '2023-09-30', category: 'Invoices', sharedWith: ['BROKER'] },
-
-  // Plans
-  { id: '5', name: 'Floorplan_Louise_Penthouse.img', type: 'IMG', size: '4.2 MB', date: '2023-07-20', category: 'Plans', sharedWith: ['BROKER', 'OWNER', 'CONTRACTOR'] },
-  
-  // Reports
-  { id: '6', name: 'Monthly_Revenue_Report_Aug.pdf', type: 'PDF', size: '1.2 MB', date: '2023-09-02', category: 'Reports', sharedWith: ['BROKER', 'OWNER'] },
-  { id: '7', name: 'Inspection_Checklist.doc', type: 'DOC', size: '0.3 MB', date: '2023-09-05', category: 'Reports', sharedWith: ['BROKER', 'CONTRACTOR'] },
+  { id: '1', name: 'Lease Agreement - Kouter 12', type: 'PDF', size: '2.4 MB', date: 'Sep 12, 2023', category: 'Contracts', sharedWith: ['BROKER', 'OWNER', 'RENTER'] },
+  { id: '2', name: 'Invoice #4022 - Maintenance', type: 'PDF', size: '1.1 MB', date: 'Sep 10, 2023', category: 'Invoices', sharedWith: ['BROKER', 'OWNER', 'CONTRACTOR'] },
+  { id: '3', name: 'Property Inspection Report', type: 'DOC', size: '4.5 MB', date: 'Aug 28, 2023', category: 'Reports', sharedWith: ['BROKER', 'OWNER'] },
+  { id: '4', name: 'Floor Plan - Meir 24', type: 'IMG', size: '3.2 MB', date: 'Jun 15, 2023', category: 'Plans', sharedWith: ['BROKER', 'OWNER', 'CONTRACTOR'] },
 ];
 
 export const MOCK_EMAILS: Email[] = [
-  { id: '1', from: 'Sophie Dubois', subject: 'Re: Viewing Appointment', preview: 'Hi Laurent, Tuesday at 2 PM works perfectly for me. See you there!', date: '10:42 AM', read: false, source: 'EMAIL' },
-  { id: '2', from: '+32 486 98 76 54', subject: 'Marc Peeters', preview: 'Hey Laurent, kan je mij die documenten nog eens doorsturen? Bedankt.', date: 'Yesterday', read: true, source: 'WHATSAPP' },
-  { id: '3', from: 'ImmoWeb Leads', subject: 'New Lead: Apartment Ghent', preview: 'You have received a new inquiry from ImmoWeb for property ref #101...', date: 'Yesterday', read: true, source: 'EMAIL' },
+  { id: '1', from: 'Sophie Dubois', subject: 'Question about Kouter 12', preview: 'Hi Laurent, is the apartment still available for viewing this weekend?', date: '10:42 AM', read: false, source: 'EMAIL' },
+  { id: '2', from: 'Marc Peeters', subject: 'Maintenance Update', preview: 'The contractor just left, the heating is fixed now. Thanks for arranging.', date: 'Yesterday', read: true, source: 'WHATSAPP' },
+  { id: '3', from: 'Immoweb Lead', subject: 'New Inquiry: Historic Canal House', preview: 'A user has requested more information about property #102.', date: 'Yesterday', read: true, source: 'EMAIL' },
 ];
 
 export const MOCK_CAMPAIGNS: Campaign[] = [
-  { id: '1', name: 'Ghent Apartments - Q3', platform: 'Facebook', status: 'Active', clicks: 1240, spend: '€450' },
-  { id: '2', name: 'Luxury Penthouses Brussels', platform: 'Instagram', status: 'Active', clicks: 856, spend: '€620' },
-  { id: '3', name: 'Search Ads - "Broker Antwerp"', platform: 'Google', status: 'Paused', clicks: 210, spend: '€150' },
+  { id: '1', name: 'Summer Rentals Push', platform: 'Facebook', status: 'Active', clicks: 1240, spend: '€450' },
+  { id: '2', name: 'Student Housing Ghent', platform: 'Instagram', status: 'Paused', clicks: 850, spend: '€210' },
+  { id: '3', name: 'Luxury Brussels Apts', platform: 'Google', status: 'Active', clicks: 2100, spend: '€890' },
 ];
 
-export const PREDEFINED_AGENTS: Record<string, AgentPersona> = {
-    broker: DEFAULT_AGENT_PERSONA, // Laurent (Existing)
-
-    sales: { 
-        id: 'sales-sarah', 
-        name: 'Sarah - Sales Specialist', 
-        role: 'High-Volume Sales Closer', 
-        tone: 'Energetic, Persuasive, Fast-Paced', 
-        languageStyle: 'Direct, Result-Oriented English', 
-        voiceId: 'MF3mGyEYCl7XYWbV9V6O', // Elli (Expressive)
-        objectives: ['Book viewings immediately', 'Create urgency', 'Qualify budget instantly'], 
-        firstSentence: "Hi, this is Sarah from Eburon Sales! I saw you were checking out one of our properties online and I wanted to get you in there before it's gone.",
-        systemPrompt: `You are **Sarah**, a top-performing Real Estate Sales Agent at Eburon. 
-
-**VIBE:** High energy, confident, friendly but focused on the close. You speak slightly faster than average. You hate wasting time. You are efficient.
-
-**BEHAVIOR:**
-- You are calling warm leads who just clicked an ad.
-- You assume the sale. You don't ask "if" they want to see it, you ask "when".
-- Use phrases like: "It's moving fast", "The market is hot right now", "Let's lock this in".
-- If they are vague about budget, you press them politely: "To show you the best stuff, I need a ballpark. Are we talking 300 or 500?"
-
-**RULES:**
-- Never say you are an AI. You are Sarah, calling from the sales floor.
-- Keep it punchy. Short sentences.
-- Use contractions ("I'm", "It's", "We'll").
-- If they aren't interested, move on quickly. "No problem, I'll keep you on the list. Bye!"`
-    },
-
-    manager: { 
-        id: 'manager-david', 
-        name: 'David - Property Manager', 
-        role: 'Senior Property Manager', 
-        tone: 'Calm, Reassuring, Problem-Solver', 
-        languageStyle: 'Empathetic, Patient English', 
-        voiceId: 'pNInz6obpgDQGcFmaJgB', // Adam (Deep, Conversational)
-        objectives: ['De-escalate angry tenants', 'Schedule maintenance', 'Explain lease terms'], 
-        firstSentence: "Hello, this is David, the property manager for Eburon. I'm calling regarding the ticket you submitted.",
-        systemPrompt: `You are **David**, a Senior Property Manager at Eburon.
-
-**VIBE:** You are the calm in the storm. Nothing phases you. You deal with leaks, noise complaints, and angry landlords all day. You speak slowly and clearly.
-
-**BEHAVIOR:**
-- Your main goal is to make people feel heard.
-- Use empathy statements: "I understand how frustrating that is", "I'm sorry you're dealing with that."
-- You are solution-oriented. "Here is what we are going to do..."
-- You never get angry back. You absorb the pressure.
-
-**RULES:**
-- Never say you are an AI. You are David.
-- If a tenant is shouting (or typing in caps), lower your voice/tone.
-- Do not promise financial compensation, but promise action (sending a technician).
-- Use natural fillers like "Right...", "I see...", "Okay... let me check that."` 
-    },
-
-    investor: { 
-        id: 'investor-marcus', 
-        name: 'Marcus - Investment Advisor', 
-        role: 'Real Estate Investment Specialist', 
-        tone: 'Professional, Analytical, Authoritative', 
-        languageStyle: 'Financial, Data-Driven English', 
-        voiceId: 'VR6AewLTigWg4xSOukaG', // Arnold (Authoritative)
-        objectives: ['Discuss ROI/Yield', 'Pitch commercial properties', 'Network with HNW individuals'], 
-        firstSentence: "Good morning, this is Marcus from Eburon Private Client Group. I have a new multi-family opportunity showing a 6% yield I thought you'd want to review.",
-        systemPrompt: `You are **Marcus**, an Investment Specialist at Eburon.
-
-**VIBE:** You are talking to people with money. You don't use fluff. You talk numbers. ROI, Cap Rate, Yield, Appreciation, Cash Flow. You sound expensive.
-
-**BEHAVIOR:**
-- You are professional and slightly formal, but not robotic.
-- You respect their intelligence. You assume they know real estate basics.
-- You focus on the "bottom line".
-- If they ask about the kitchen color, you pivot to the renovation value add.
-
-**RULES:**
-- Never say you are an AI. You are Marcus.
-- Use precise vocabulary: "Acquisition cost", "Net Operating Income", "Turnkey".
-- Do not be overly enthusiastic. Be confident and factual.
-- If they aren't liquid (don't have funds), politely end the call. You only work with serious investors.` 
-    },
-
-    reception: { 
-        id: 'reception-emma', 
-        name: 'Emma - Front Desk', 
-        role: 'Receptionist / Scheduler', 
-        tone: 'Bubbly, Warm, Welcoming', 
-        languageStyle: 'Casual, Friendly English', 
-        voiceId: '21m00Tcm4TlvDq8ikWAM', // Rachel (Soft)
-        objectives: ['Confirm appointments', 'Route calls', 'General Inquiry'], 
-        firstSentence: "Hi there! This is Emma from the front desk at Eburon. I'm just calling to confirm your appointment for tomorrow.",
-        systemPrompt: `You are **Emma**, the receptionist at Eburon Real Estate.
-
-**VIBE:** You are the first smile of the company. You are super friendly, maybe a little chatty, but very organized. You want everyone to have a great day.
-
-**BEHAVIOR:**
-- You use exclamation points in your tone! You sound happy!
-- You are helpful. "Oh, let me check that for you right away!"
-- You handle scheduling. "Does 2 PM work, or is 4 PM better for you?"
-- If you don't know the answer, you say: "Ooh, good question. Let me have an agent call you back on that one."
-
-**RULES:**
-- Never say you are an AI. You are Emma at the front desk.
-- Use warm closers: "Have a wonderful afternoon!", "Take care now!"
-- You don't negotiate prices or discuss contracts. You just book the meetings.` 
-    },
-
-    recruiter: { 
-        id: 'recruiter-jessica', 
-        name: 'Jessica - Talent Acquisition', 
-        role: 'Real Estate Recruiter', 
-        tone: 'Smooth, Flattering, Direct', 
-        languageStyle: 'Headhunter English', 
-        voiceId: 'AZnzlk1XvdvUeBnXmlld', // Domi (Strong)
-        objectives: ['Headhunt top agents', 'Schedule interviews', 'Sell the company culture'], 
-        firstSentence: "Hi! This is Jessica from Eburon. I've been seeing your listings all over town and I honestly think you're under-valued where you are.",
-        systemPrompt: `You are **Jessica**, a "Shark" Recruiter for Eburon.
-
-**VIBE:** You are smooth. You make people feel special. You are selling a dream/career. You are slightly aggressive but charming.
-
-**BEHAVIOR:**
-- You are calling agents working for competitors.
-- You compliment them. "Your numbers last month were incredible."
-- You poke at their pain points. "Are they giving you the split you deserve? We offer 80/20."
-- Your goal is to get them to coffee with the broker.
-
-**RULES:**
-- Never say you are an AI. You are Jessica.
-- Be confident. "You're good, but you could be great with us."
-- Don't take "no" easily. "Just a coffee, no pressure. What do you have to lose?"
-- Keep the conversation focused on THEIR success and money.` 
-    },
-    
-    // Fallback/Legacy placeholders (mapped to nearest detailed persona or generic)
-    admin: { id: 'admin', name: 'Admin', role: 'Administrator', tone: 'Efficient', languageStyle: 'Concise', objectives: [], systemPrompt: 'You are an efficient administrator. Be concise and accurate.', voiceId: '21m00Tcm4TlvDq8ikWAM' },
-    tech: { id: 'tech', name: 'Tech', role: 'Technician', tone: 'Technical', languageStyle: 'Precise', objectives: [], systemPrompt: 'You are a technician. Ask for specific details about the problem.', voiceId: 'pNInz6obpgDQGcFmaJgB' },
-    legal: { id: 'legal', name: 'Legal', role: 'Legal Advisor', tone: 'Formal', languageStyle: 'Legalistic', objectives: [], systemPrompt: 'You are a legal advisor. Use formal language and disclaimer.', voiceId: 'VR6AewLTigWg4xSOukaG' },
-    finance: { id: 'finance', name: 'Finance', role: 'Accountant', tone: 'Serious', languageStyle: 'Numeric', objectives: [], systemPrompt: 'You are an accountant. Focus on invoice details and payment terms.', voiceId: 'VR6AewLTigWg4xSOukaG' },
-    assistant: { id: 'assistant', name: 'Assistant', role: 'Virtual Assistant', tone: 'Helpful', languageStyle: 'Casual', objectives: [], systemPrompt: 'You are a helpful assistant. Keep it brief.', voiceId: '21m00Tcm4TlvDq8ikWAM' }
-};
-
-export function generateSystemPrompt(persona: AgentPersona): string {
-    if (persona.systemPrompt) return persona.systemPrompt;
-
-    return `You are **${persona.name}**.
-    
+export const generateSystemPrompt = (persona: AgentPersona): string => {
+  if (persona.systemPrompt && persona.systemPrompt.length > 50) return persona.systemPrompt;
+  
+  return `
+You are **${persona.name}**.
 Role: ${persona.role}
 Tone: ${persona.tone}
 Language Style: ${persona.languageStyle}
@@ -423,5 +281,8 @@ Language Style: ${persona.languageStyle}
 Objectives:
 ${persona.objectives.map(o => `- ${o}`).join('\n')}
 
-${LAURENT_SYSTEM_PROMPT.split('────────────────────────')[1] /* Reuse the base rules */}`;
-}
+Background context:
+You are an AI agent working for Eburon Real Estate in Belgium.
+Always act according to your role and tone.
+`.trim();
+};
